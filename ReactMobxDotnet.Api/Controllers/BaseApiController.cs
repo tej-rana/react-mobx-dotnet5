@@ -10,6 +10,12 @@ namespace ReactMobxDotnet.Api.Controllers
     public class BaseApiController : ControllerBase
     {
         private IMediator _mediator;
+
+        public BaseApiController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         protected IMediator Mediator => _mediator ?? HttpContext.RequestServices.GetService<IMediator>();
 
         protected ActionResult HandleResult<T>(Result<T> result)

@@ -2,14 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using ReactMobxDotnet.Domain;
 
 namespace ReactMobxDotnet.Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+                {
+                    new AppUser{DisplayName = "Tej", UserName = "tej", Email = "tej@email.com"},
+                    new AppUser{DisplayName = "Yug", UserName = "yug", Email = "yug@email.com"},
+                    new AppUser{DisplayName = "Yudhish", UserName = "yud", Email = "yud@email.com"}
+                };
+                
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Secr3t!");
+                }
+            }
+            
             if (context.Activities.Any()) return;
 
             var activities = new List<Activity>
