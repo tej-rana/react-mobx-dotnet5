@@ -1,8 +1,11 @@
 using System;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ReactMobxDotnet.Api.Controllers
 {
+    [AllowAnonymous]
     public class BuggyController : BaseApiController
     {
         [HttpGet("not-found")]
@@ -27,6 +30,10 @@ namespace ReactMobxDotnet.Api.Controllers
         public ActionResult GetUnauthorised()
         {
             return Unauthorized();
+        }
+
+        public BuggyController(IMediator mediator) : base(mediator)
+        {
         }
     }
 }

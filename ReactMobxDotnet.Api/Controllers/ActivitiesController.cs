@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReactMobxDotnet.Domain;
 
@@ -43,5 +45,8 @@ namespace ReactMobxDotnet.Api.Controllers
             return HandleResult(await Mediator.Send(new Application.Activities.Delete.Command{ Id = id}));
         }
 
+        public ActivitiesController(IMediator mediator) : base(mediator)
+        {
+        }
     }
 }
