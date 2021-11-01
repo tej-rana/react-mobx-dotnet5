@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,12 +47,14 @@ namespace ReactMobxDotnet.Api.Controllers
         {
             if (await _userManager.Users.AnyAsync(x => x.Email.Equals(registerDto.Email)))
             {
-                return Conflict("Email taken");
+                ModelState.AddModelError("email", "Email taken");
+                return ValidationProblem();
             }
             
             if (await _userManager.Users.AnyAsync(x => x.UserName.Equals(registerDto.Username)))
             {
-                return Conflict("User exists");
+                ModelState.AddModelError("username", "User Exists");
+                return ValidationProblem();
             }
 
             var user = new AppUser

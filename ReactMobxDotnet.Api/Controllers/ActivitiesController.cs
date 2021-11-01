@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ReactMobxDotnet.Domain;
 
 namespace ReactMobxDotnet.Api.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         
