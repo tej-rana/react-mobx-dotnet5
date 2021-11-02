@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ReactMobxDotnet.Api.Controllers
 {
-    [AllowAnonymous]
     public class BuggyController : BaseApiController
     {
         [HttpGet("not-found")]

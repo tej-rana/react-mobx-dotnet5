@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ReactMobxDotnet.Application\ReactMobxDotnet.Application.csproj" />
+    <ProjectReference Include="..\ReactMobxDotnet.Infrastructure\ReactMobxDotnet.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

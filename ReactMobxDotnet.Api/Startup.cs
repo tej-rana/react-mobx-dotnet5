@@ -24,7 +24,9 @@ using ReactMobxDotnet.Api.Middleware;
 using ReactMobxDotnet.Api.Services;
 using ReactMobxDotnet.Application.Activities;
 using ReactMobxDotnet.Application.Core;
+using ReactMobxDotnet.Application.Interfaces;
 using ReactMobxDotnet.Domain;
+using ReactMobxDotnet.Infrastructure.Security;
 using ReactMobxDotnet.Persistence;
 
 namespace ReactMobxDotnet.Api
@@ -92,6 +94,15 @@ namespace ReactMobxDotnet.Api
                     };
                 });
             services.AddScoped<TokenService>();
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("IsActivityHost", policy =>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+            services.AddScoped<IUserAccessor, UserAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
