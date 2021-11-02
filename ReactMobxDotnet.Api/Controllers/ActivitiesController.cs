@@ -9,7 +9,6 @@ using ReactMobxDotnet.Domain;
 
 namespace ReactMobxDotnet.Api.Controllers
 {
-    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         
@@ -33,7 +32,7 @@ namespace ReactMobxDotnet.Api.Controllers
             return HandleResult(await Mediator.Send(new Application.Activities.Create.Command{ Activity = activity}));
         }
         
-        
+        [Authorize(Policy = "IsActivityHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateActivity(Guid id, Activity activity)
         {
@@ -41,10 +40,17 @@ namespace ReactMobxDotnet.Api.Controllers
             return HandleResult(await Mediator.Send(new Application.Activities.Edit.Command{ Activity = activity}));
         }
         
+        [Authorize(Policy = "IsActivityHost")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> UpdateDelete(Guid id)
+        public async Task<IActionResult> DeleteActivity(Guid id)
         {
             return HandleResult(await Mediator.Send(new Application.Activities.Delete.Command{ Id = id}));
+        }
+        
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Application.Activities.UpdateAttendance.Command{ Id = id}));
         }
 
         public ActivitiesController(IMediator mediator) : base(mediator)
