@@ -26,6 +26,7 @@ using ReactMobxDotnet.Application.Activities;
 using ReactMobxDotnet.Application.Core;
 using ReactMobxDotnet.Application.Interfaces;
 using ReactMobxDotnet.Domain;
+using ReactMobxDotnet.Infrastructure.Photos;
 using ReactMobxDotnet.Infrastructure.Security;
 using ReactMobxDotnet.Persistence;
 
@@ -103,6 +104,8 @@ namespace ReactMobxDotnet.Api
             });
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.Configure<CloudinarySettings>(_config.GetSection("Cloudinary"));
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

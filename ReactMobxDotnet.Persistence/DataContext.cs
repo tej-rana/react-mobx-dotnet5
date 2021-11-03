@@ -13,6 +13,8 @@ namespace ReactMobxDotnet.Persistence
 
         public DbSet<Activity> Activities {get; set;}
         public DbSet<ActivityAttendee> ActivityAttendees {get; set;}
+        
+        public DbSet<Photo> Photos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -22,7 +24,7 @@ namespace ReactMobxDotnet.Persistence
             
             builder.Entity<ActivityAttendee>()
                 .HasOne(u => u.AppUser)
-                .WithMany(a => a.Actvities)
+                .WithMany(a => a.Activities)
                 .HasForeignKey(aa => aa.AppUserId);
             
             builder.Entity<ActivityAttendee>()
