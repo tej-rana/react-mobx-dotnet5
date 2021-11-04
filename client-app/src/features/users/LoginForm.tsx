@@ -4,7 +4,6 @@ import MyTextInput from "../../app/common/form/MyTextInput";
 import {Button, Header, Label} from "semantic-ui-react";
 import {useStore} from "../../app/stores/store";
 import {observer} from "mobx-react-lite";
-import * as Yup from "yup";
 
 export default observer(function LoginForm() {
 
