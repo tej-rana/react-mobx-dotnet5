@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ReactMobxDotnet.Api.Middleware;
 using ReactMobxDotnet.Api.Services;
+using ReactMobxDotnet.Api.SignalR;
 using ReactMobxDotnet.Application.Activities;
 using ReactMobxDotnet.Application.Core;
 using ReactMobxDotnet.Application.Interfaces;
@@ -68,7 +69,7 @@ namespace ReactMobxDotnet.Api
             {
              opt.AddPolicy("CorsPolicy", policy =>
              {
-                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                 policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000");
              });   
             });
 
@@ -93,6 +94,20 @@ namespace ReactMobxDotnet.Api
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chat"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
             services.AddScoped<TokenService>();
             services.AddAuthorization(opt =>
@@ -106,6 +121,7 @@ namespace ReactMobxDotnet.Api
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.Configure<CloudinarySettings>(_config.GetSection("Cloudinary"));
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -131,6 +147,7 @@ namespace ReactMobxDotnet.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }
